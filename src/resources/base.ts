@@ -1,4 +1,5 @@
-import type { Loyverse } from '../client';
+import type Loyverse from '../client';
+import type { BaseParams, PaginatedResponse } from '../types';
 
 export abstract class APIResource {
     protected client: Loyverse;
@@ -7,7 +8,7 @@ export abstract class APIResource {
         this.client = client;
     }
 
-    protected async getResource<T, P = Record<string, unknown>>(path: string, params?: P): Promise<T> {
+    protected async getResource<T>(path: string, params?: BaseParams): Promise<T> {
         return this.client.request('GET', path, { params });
     }
 
@@ -19,12 +20,17 @@ export abstract class APIResource {
         return this.client.request('DELETE', path);
     }
 
-    protected async *paginate<T>(path: string, params = {}) {
-        let cursor = null;
+    protected async *paginate<T>(path: string, params: BaseParams = {}) {
+        let currentCursor: string | undefined = undefined;
+        let nextResponse: PaginatedResponse<T>;
+
         do {
-            const response = await this.getResource<{ items: T[]; cursor?: string }>(path, { ...params, cursor });
-            yield* response.items || [];
-            cursor = response.cursor;
-        } while (cursor);
+            nextResponse = await this.getResource<PaginatedResponse<T>>(
+                path,
+                { ...params, cursor: currentCursor }
+            );
+            yield* nextResponse.items || [];
+            currentCursor = nextResponse.cursor;
+        } while (currentCursor);
     }
 }

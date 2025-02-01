@@ -5,29 +5,30 @@ export interface ClientOptions {
 }
 
 export interface RequestOptions {
-    params?: Record<string, string | number | boolean | undefined>;
+    params?: Record<string, string | number | boolean | null | undefined>;
     data?: Record<string, unknown>;
     headers?: Record<string, string>;
-    [key: string]: unknown;
+    body?: BodyInit;
 }
 
-export interface PaginationParams {
+export interface BaseParams {
+    [key: string]: string | number | boolean | undefined;
+}
+
+export interface PaginationParams extends BaseParams {
     limit?: number;
     cursor?: string;
-    [key: string]: unknown;
+    created_at_min?: string;
+    created_at_max?: string;
+    updated_at_min?: string;
+    updated_at_max?: string;
 }
 
-export interface Category {
-    id: string;
-    name: string;
-    color?: string;
-    created_at: string;
-    updated_at: string;
-    deleted_at?: string;
+export interface PaginatedResponse<T> {
+    items: T[];
+    cursor?: string;
+    total_count?: number;
 }
 
-export interface ListCategoriesParams extends PaginationParams {
-    categories_ids?: string;
-    show_deleted?: boolean;
-}
-
+export * from './resources';
+export * from './categories';
