@@ -1,0 +1,32 @@
+# Source
+src/
+tests/
+
+# Config files
+.eslintrc
+.gitignore
+tsconfig.json
+vitest.config.ts
+
+# IDE
+.vscode/
+.idea/
+
+# Logs
+*.log
+
+# Environment
+.env*
+
+# Build artifacts
+coverage/
+.nyc_output/
+
+# Git
+.git/
+.gitignore
+
+# Docs
+docs/
+*.md
+!README.md
