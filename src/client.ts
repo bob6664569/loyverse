@@ -4,7 +4,7 @@ import { LoyverseError } from './errors';
 import { Categories, Customers, Inventory, Items } from './resources';
 import type { ClientOptions, RequestOptions } from './types';
 
-class Loyverse {
+export class Loyverse {
     private baseURL: string;
     private token: string;
     private retryConfig: RetryConfig;
@@ -38,7 +38,9 @@ class Loyverse {
 
         while (attempt <= maxAttempts) {
             try {
-                const url = new URL(path, this.baseURL);
+                // Format path to ensure it starts with a slash
+                const cleanPath = path.startsWith('/') ? path : `/${path}`;
+                const url = new URL(`${this.baseURL}${cleanPath}`);
                 if (params) {
                     Object.entries(params).forEach(([key, value]) => {
                         if (value !== undefined) url.searchParams.append(key, String(value));
@@ -59,6 +61,7 @@ class Loyverse {
                     requestOptions.body = JSON.stringify(data);
                 }
 
+                console.debug(`Making request to: ${url.toString()}`);
                 const response = await fetch(url.toString(), requestOptions);
                 const responseData = await response.json();
 

@@ -1,6 +1,6 @@
 {
   "name": "loyverse",
-  "version": "0.1.4",
+  "version": "0.1.6",
   "description": "Modern Node.js client for the Loyverse API",
   "type": "module",
   "main": "./dist/index.js",
