@@ -1,8 +1,11 @@
-// src/client.ts
+import debug from 'debug';
+
 import { RetryConfig } from './config/retry';
 import { LoyverseError } from './errors';
 import { Categories, Customers, Inventory, Items } from './resources';
 import type { ClientOptions, RequestOptions } from './types';
+
+const log = debug('loyverse');
 
 export class Loyverse {
     private baseURL: string;
@@ -47,7 +50,7 @@ export class Loyverse {
                     });
                 }
 
-                const requestOptions: RequestInit = {
+                const requestOptions = {
                     method,
                     headers: {
                         'Authorization': `Bearer ${this.token}`,
@@ -61,7 +64,7 @@ export class Loyverse {
                     requestOptions.body = JSON.stringify(data);
                 }
 
-                console.debug(`Making request to: ${url.toString()}`);
+                log(`Making request to: ${url.toString()}`);
                 const response = await fetch(url.toString(), requestOptions);
                 const responseData = await response.json();
 
@@ -82,6 +85,7 @@ export class Loyverse {
 
                 return responseData;
             } catch (error) {
+                log(error);
                 if (error instanceof LoyverseError) throw error;
                 if (error instanceof Error) {
                     throw new LoyverseError(error.message, 500);

@@ -1,12 +1,11 @@
 # Loyverse API Client
 
-An unofficial Node.js client for the Loyverse API. Modern, lightweight and zero-dependency.
+An unofficial Node.js client for the Loyverse API. Modern, lightweight.
 
 ⚠️ This is not an official Loyverse product. Use at your own risk.
 
 ## Features
 
-- Zero dependencies
 - Full TypeScript support
 - Automatic retry on rate limits
 - Async iterator pagination
